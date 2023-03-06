@@ -14,6 +14,10 @@ let raycaster;
 const intersected = [];
 const tempMatrix = new THREE.Matrix4();
 
+let contador = 0;
+let x1, y1, z1;
+let x2, y2, z2;
+
 let group;
 
 init();
@@ -56,43 +60,7 @@ function init() {
     group = new THREE.Group();
     scene.add( group );
 
-    const geometries = [
-            new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
-            new THREE.ConeGeometry( 0.2, 0.2, 64 ),
-            new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
-            new THREE.IcosahedronGeometry( 0.2, 8 ),
-            new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
-    ];
-
-    for ( let i = 0; i < 50; i ++ ) {
-
-            const geometry = geometries[ Math.floor( Math.random() * geometries.length ) ];
-            const material = new THREE.MeshStandardMaterial( {
-                    color: Math.random() * 0xffffff,
-                    roughness: 0.7,
-                    metalness: 0.0
-            } );
-
-            const object = new THREE.Mesh( geometry, material );
-
-            object.position.x = Math.random() * 4 - 2;
-            object.position.y = Math.random() * 2;
-            object.position.z = Math.random() * 4 - 2;
-
-            object.rotation.x = Math.random() * 2 * Math.PI;
-            object.rotation.y = Math.random() * 2 * Math.PI;
-            object.rotation.z = Math.random() * 2 * Math.PI;
-
-            object.scale.setScalar( Math.random() + 0.5 );
-
-            object.castShadow = true;
-            object.receiveShadow = true;
-
-            group.add( object );
-
-    }
-
-    //
+    
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -155,39 +123,37 @@ function onWindowResize() {
 }
 
 function onSelectStart( event ) {
-
-    const controller = event.target;
-
-    const intersections = getIntersections( controller );
-
-    if ( intersections.length > 0 ) {
-
-            const intersection = intersections[ 0 ];
-
-            const object = intersection.object;
-            object.material.emissive.b = 1;
-            controller.attach( object );
-
-            controller.userData.selected = object;
-
+    
+    if (contador === 0){
+        contador += 1;
+        const controller = event.target;
+        const location = controller.position;
+        x1 = location.x;
+        y1 = location.y;
+        z1 = location.z;
+    }else{
+        contador += 1;
+        const controller = event.target;
+        const location = controller.position;
+        x2 = location.x;
+        y2 = location.y;
+        z2 = location.z;
     }
-
 }
 
 function onSelectEnd( event ) {
 
-    const controller = event.target;
-
-    if ( controller.userData.selected !== undefined ) {
-
-            const object = controller.userData.selected;
-            object.material.emissive.b = 0;
-            group.attach( object );
-
-            controller.userData.selected = undefined;
-
+    const geometry = new THREE.SphereGeometry(3, 3, 2);
+    const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    const sphere = new THREE.Mesh( geometry, material );
+    sphere.position = location;
+    scene.add( sphere );
+    if (contador === 2){
+        const geometry = new THREE.BoxGeometry( x2-x1, y2-y1, z2-z1 );
+        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        const cube = new THREE.Mesh( geometry, material );
+        scene.add( cube );
     }
-
 
 }
 
