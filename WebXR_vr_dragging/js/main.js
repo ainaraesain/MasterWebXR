@@ -15,8 +15,7 @@ const intersected = [];
 const tempMatrix = new THREE.Matrix4();
 
 let contador = 0;
-let x1, y1, z1;
-let x2, y2, z2;
+let punto1, punto2;
 
 let group;
 
@@ -124,38 +123,43 @@ function onWindowResize() {
 
 function onSelectStart( event ) {
     
-    if (contador === 0){
-        contador += 1;
-        const controller = event.target;
-        const location = controller.position;
-        x1 = location.x;
-        y1 = location.y;
-        z1 = location.z;
-    }else{
-        contador += 1;
-        const controller = event.target;
-        const location = controller.position;
-        x2 = location.x;
-        y2 = location.y;
-        z2 = location.z;
-    }
+    event.target.userData.isSelecting = true;
+    contador += 1;
+    const controller = event.target;
+    const location = controller.position;
+
 }
 
 function onSelectEnd( event ) {
 
-    const geometry = new THREE.SphereGeometry(3, 3, 2);
-    const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-    const sphere = new THREE.Mesh( geometry, material );
-    sphere.position = location;
-    scene.add( sphere );
+    event.target.userData.isSelecting = false;
+
+}
+
+function points (controller){
+
+    if (controller.userData.isSelecting === true){
+        const geometry = new THREE.SphereGeometry(3, 3, 2);
+        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const sphere = new THREE.Mesh( geometry, material );
+        sphere.position.copy(location);
+        scene.add( sphere );
+        if (contador === 1){
+            punto1 = sphere.location;
+        }else{
+            punto2 = sphere.location;
+        }
+    }
+}
+
+function createBox (controller){
     if (contador === 2){
-        const geometry = new THREE.BoxGeometry( x2-x1, y2-y1, z2-z1 );
+        const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
         const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         const cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
         contador = 0;
     }
-
 }
 
 //
@@ -168,7 +172,10 @@ function animate() {
 
 function render() {
 
+    points(controller1);
+    points(controller2);
+    createBox(controller1);
+    
     renderer.render( scene, camera );
 
 }
-
