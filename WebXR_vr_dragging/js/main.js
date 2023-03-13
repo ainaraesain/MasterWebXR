@@ -124,9 +124,7 @@ function onWindowResize() {
 function onSelectStart( event ) {
     
     event.target.userData.isSelecting = true;
-    contador += 1;
-    const controller = event.target;
-    const location = controller.position;
+    
 }
 
 function onSelectEnd( event ) {
@@ -135,14 +133,13 @@ function onSelectEnd( event ) {
 
 }
 
-function handleController (controler){
-    if (controler.userData.isSelecting === true){
+function handleController (controller){
+    if (controller.userData.isSelecting === true){
         contador += 1;
-        const controller = event.target;
-        const location = controller.position;
-        const geometry = new THREE.SphereGeometry(3, 3, 2);
-        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-        const sphere = new THREE.Mesh( geometry, material );
+        let location = controller.position;
+        let geometry = new THREE.SphereGeometry(3, 3, 2);
+        let material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        let sphere = new THREE.Mesh( geometry, material );
         sphere.position.copy(location);
         scene.add( sphere );
         if (contador === 1){
