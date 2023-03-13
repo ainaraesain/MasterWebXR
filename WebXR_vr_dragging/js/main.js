@@ -127,7 +127,6 @@ function onSelectStart( event ) {
     contador += 1;
     const controller = event.target;
     const location = controller.position;
-
 }
 
 function onSelectEnd( event ) {
@@ -136,9 +135,11 @@ function onSelectEnd( event ) {
 
 }
 
-function points (controller){
-
-    if (controller.userData.isSelecting === true){
+function handleController (controler){
+    if (controler.userData.isSelecting === true){
+        contador += 1;
+        const controller = event.target;
+        const location = controller.position;
         const geometry = new THREE.SphereGeometry(3, 3, 2);
         const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
         const sphere = new THREE.Mesh( geometry, material );
@@ -152,15 +153,6 @@ function points (controller){
     }
 }
 
-function createBox (controller){
-    if (contador === 2){
-        const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-        const cube = new THREE.Mesh( geometry, material );
-        scene.add( cube );
-        contador = 0;
-    }
-}
 
 //
 
@@ -172,10 +164,17 @@ function animate() {
 
 function render() {
 
-    points(controller1);
-    points(controller2);
-    createBox(controller1);
-    
+    handleController(controller1);
+    handleController(controller2);
+
+    if (contador === 2){
+        const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
+        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        const cube = new THREE.Mesh( geometry, material );
+        scene.add( cube );
+        contador = 0;
+    }
+
     renderer.render( scene, camera );
 
 }
