@@ -137,7 +137,7 @@ function handleController (controller){
     if (controller.userData.isSelecting === true){
         contador += 1;
         let location = controller.position;
-        let geometry = new THREE.SphereGeometry(3, 3, 2);
+        let geometry = new THREE.SphereGeometry(10, 10, 10);
         let material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
         let sphere = new THREE.Mesh( geometry, material );
         sphere.position.copy(location);
@@ -162,7 +162,7 @@ function animate() {
 function render() {
 
     handleController(controller1);
-    handleController(controller2);
+    //handleController(controller2);
 
     if (contador === 2){
         const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
