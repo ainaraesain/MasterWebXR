@@ -165,9 +165,10 @@ function render() {
     //handleController(controller2);
 
     if (contador === 2){
-        const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-        const cube = new THREE.Mesh( geometry, material );
+        //const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
+        let geometry = new THREE.BoxGeometry(20, 20, 20);
+        let material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        let cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
         contador = 0;
     }
