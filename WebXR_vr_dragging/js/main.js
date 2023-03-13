@@ -72,6 +72,19 @@ function init() {
     document.body.appendChild( VRButton.createButton( renderer ) );
 
     // controllers
+    
+    function onSelectStart() {
+    
+        this.userData.isSelecting = true;
+
+    }
+
+
+    function onSelectEnd() {
+
+        this.userData.isSelecting = false;
+
+    }
 
     controller1 = renderer.xr.getController( 0 );
     controller1.addEventListener( 'selectstart', onSelectStart );
@@ -121,17 +134,6 @@ function onWindowResize() {
 
 }
 
-function onSelectStart( event ) {
-    
-    event.target.userData.isSelecting = true;
-    
-}
-
-function onSelectEnd( event ) {
-
-    event.target.userData.isSelecting = false;
-
-}
 
 function handleController (controller){
     if (controller.userData.isSelecting === true){
@@ -166,7 +168,7 @@ function render() {
 
     if (contador === 2){
         //const geometry = new THREE.BoxGeometry( punto2.x-punto1.x, punto2.y-punto1.y, punto2.z-punto1.z );
-        let geometry = new THREE.BoxGeometry(20, 20, 20);
+        let geometry = new THREE.BoxGeometry(2, 2, 2);
         let material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         let cube = new THREE.Mesh( geometry, material );
         scene.add( cube );
